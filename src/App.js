@@ -22,21 +22,27 @@ const initialFriends = [
 ];
 
 const App = function () {
+  const [friends, setFriends] = useState(initialFriends);
+
+  const handleAddFriend = function (newFriend) {
+    setFriends((friends) => [...friends, newFriend]);
+  };
+
   return (
     <div className="app">
       <div className="sidebar">
-        <FriendsList />
-        <FriendForm />
+        <FriendsList friends={friends} />
+        <FriendForm onAddFriend={handleAddFriend} />
       </div>
       <SplitForm />
     </div>
   );
 };
 
-const FriendsList = function () {
+const FriendsList = function ({ friends }) {
   return (
     <div>
-      {initialFriends.map((friend) => (
+      {friends.map((friend) => (
         <Friend friend={friend} key={friend.id} />
       ))}
     </div>
@@ -72,7 +78,7 @@ const Friend = function ({ friend }) {
   );
 };
 
-const FriendForm = function () {
+const FriendForm = function ({ onAddFriend }) {
   const [showAddFriend, setShowAddFriend] = useState(false);
 
   const [name, setName] = useState("");
@@ -90,7 +96,7 @@ const FriendForm = function () {
       image: `${image}? = ${id}`,
       balance: 0,
     };
-    console.log(newFriend);
+    onAddFriend(newFriend);
 
     setName("");
     setImage("https://i.pravatar.cc/48");
