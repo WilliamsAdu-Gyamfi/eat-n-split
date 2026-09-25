@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 const initialFriends = [
   {
     id: 118836,
@@ -71,18 +73,28 @@ const Friend = function ({ friend }) {
 };
 
 const FriendForm = function () {
+  const [showAddFriend, setShowAddFriend] = useState(false);
+
+  const handleTogggleAddFriend = function () {
+    setShowAddFriend((show) => !show);
+  };
+
   return (
     <>
-      <form className="form-add-friend">
-        <label>Friend name</label>
-        <input type="text" placeholder="friend name"></input>
+      {showAddFriend && (
+        <form className="form-add-friend">
+          <label>Friend name</label>
+          <input type="text" placeholder="friend name"></input>
 
-        <label>image URL</label>
-        <input type="text" placeholder="image url"></input>
+          <label>image URL</label>
+          <input type="text" placeholder="image url"></input>
 
-        <button className="button">Add</button>
-      </form>
-      <button className="button">Add friend</button>
+          <button className="button">Add</button>
+        </form>
+      )}
+      <button className="button" onClick={handleTogggleAddFriend}>
+        {showAddFriend ? "close" : "Add Friend"}
+      </button>
     </>
   );
 };
