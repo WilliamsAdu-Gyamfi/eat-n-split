@@ -75,6 +75,27 @@ const Friend = function ({ friend }) {
 const FriendForm = function () {
   const [showAddFriend, setShowAddFriend] = useState(false);
 
+  const [name, setName] = useState("");
+  const [image, setImage] = useState("https://i.pravatar.cc/48");
+
+  const handleAddSubmit = function (e) {
+    e.preventDefault();
+
+    if (!name || !image) return; // so it won't submit empty form
+
+    const id = crypto.randomUUID();
+    const newFriend = {
+      id,
+      name,
+      image: `${image}? = ${id}`,
+      balance: 0,
+    };
+    console.log(newFriend);
+
+    setName("");
+    setImage("https://i.pravatar.cc/48");
+  };
+
   const handleTogggleAddFriend = function () {
     setShowAddFriend((show) => !show);
   };
@@ -82,12 +103,22 @@ const FriendForm = function () {
   return (
     <>
       {showAddFriend && (
-        <form className="form-add-friend">
+        <form className="form-add-friend" onSubmit={handleAddSubmit}>
           <label>Friend name</label>
-          <input type="text" placeholder="friend name"></input>
+          <input
+            type="text"
+            placeholder="friend name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          ></input>
 
           <label>image URL</label>
-          <input type="text" placeholder="image url"></input>
+          <input
+            type="text"
+            placeholder="image url"
+            value={image}
+            onChange={(e) => setImage(e.target.value)}
+          ></input>
 
           <button className="button">Add</button>
         </form>
