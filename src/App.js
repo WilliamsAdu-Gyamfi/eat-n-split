@@ -38,6 +38,17 @@ const App = function () {
     );
   };
 
+  const handleSplitBill = function (value) {
+    console.log(value);
+    setFriends((friends) =>
+      friends.map((friend) =>
+        friend.id === selectedFriend.id
+          ? { ...friend, balance: friend.balance + value }
+          : friend,
+      ),
+    );
+  };
+
   return (
     <div className="app">
       <div className="sidebar">
@@ -51,7 +62,12 @@ const App = function () {
           onSelection={handleSelection}
         />
       </div>
-      {selectedFriend && <SplitForm selectedFriend={selectedFriend} />}
+      {selectedFriend && (
+        <SplitForm
+          selectedFriend={selectedFriend}
+          onSplitBill={handleSplitBill}
+        />
+      )}
     </div>
   );
 };
@@ -162,14 +178,20 @@ const FriendForm = function ({ onAddFriend }) {
   );
 };
 
-const SplitForm = function ({ selectedFriend }) {
+const SplitForm = function ({ selectedFriend, onSplitBill }) {
   const [bill, setBill] = useState("");
   const [userBill, setUserBill] = useState("");
   const billFriend = bill ? bill - userBill : "";
   const [whoPays, setWhoPays] = useState("user");
+  const handleSubmit = function (e) {
+    e.preventDefault();
+
+    if (!bill || !userBill) return;
+    onSplitBill(whoPays === "user" ? billFriend : -userBill);
+  };
   return (
     <>
-      <form className="form-split-bill">
+      <form className="form-split-bill" onSubmit={handleSubmit}>
         <h2>SPLIT BILL WITH {selectedFriend.name}</h2>
         <label>Bill Value </label>
         <input
